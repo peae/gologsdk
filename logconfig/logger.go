@@ -73,6 +73,7 @@ var Logger *zap.Logger
 var Sugar *zap.SugaredLogger
 
 func createOrder(Tablename string, Time int64, Text string) {
+	log.Println("-=============================ooo3")
 	var order pb.Order
 
 	aggregateID := uuid.NewV4().String()
@@ -96,7 +97,6 @@ func createOrder(Tablename string, Time int64, Text string) {
 	// 	return
 	// }
 
-
 	//调用nats发送消息
 	err := createOrderNats(order)
 	if err != nil {
@@ -107,6 +107,8 @@ func createOrder(Tablename string, Time int64, Text string) {
 }
 
 func createOrderNats(order pb.Order) error {
+
+	log.Println("-=============================ooo1")
 
 	//连接nats服务器
 	sc, err := stan.Connect(
@@ -123,14 +125,13 @@ func createOrderNats(order pb.Order) error {
 
 	orderJSON, _ := json.Marshal(order)
 
-
 	err = sc.Publish(channel, orderJSON)
+	log.Println("-=============================oooo2")
 	if err != nil {
 		return errors.Wrap(err, "Error from nats server")
 	} else {
 		return nil
 	}
-
 
 }
 
@@ -215,11 +216,13 @@ type SugaredLoggers struct {
 }
 
 func GetSugaredLoggers() *SugaredLoggers {
+	log.Println("-=============================ooo4")
 	return &SugaredLoggers{}
 }
 
 // Info uses fmt.Sprint to construct and log a message.//监听grpc,将信息插入到数据库
 func (s *SugaredLoggers) Info(args ...interface{}) {
+	log.Println("-=============================ooo56")
 	//循环遍历不定参数
 	var c string
 	for _, item := range args {
@@ -243,7 +246,6 @@ func (s *SugaredLoggers) Info(args ...interface{}) {
 
 	//请求网关服务
 	//如果成功就打印日志，失败就打印连接失败
-	
 
 	Sugar.Info(args)
 }
